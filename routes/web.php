@@ -22,6 +22,8 @@ Route::get('/', function () {
 
 Route::get('/plants', [PlantsController::class, 'index'])->name('plants');
 Route::get('/plants/create', [PlantsController::class, 'create'])->name('plants/create');
+Route::post('/plants/create', [PlantsController::class, 'store'])->name('plants/store');
+Route::post('/plants/destroy', [PlantsController::class, 'destroy'])->name('plants/destroy');
 
 Route::get('/breeds', [BreedsController::class, 'index'])->name('breeds');
 Route::get('/breeds/create', [BreedsController::class, 'create'])->name('breeds/create');

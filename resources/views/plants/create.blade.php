@@ -24,16 +24,13 @@
                                         class="col-md-4 col-form-label text-md-end">{{ __('Gatunek') }}</label>
 
                                     <div class="col-md-6">
-                                        <select class="form-control @error('breed') is-invalid @enderror" name="breed">
+                                        <select class="form-control @error('breed_id') is-invalid @enderror" name="breed_id">
                                             @foreach ($breeds as $breed)
-
+                                                <option value="{{$breed->id}}" {{ old('breed_id') == $breed->id ? 'selected' : '' }}>{{$breed->name}}</option>
                                             @endforeach
                                         </select>
-                                        <input id="breed" type="text"
-                                            class="form-control @error('breed') is-invalid @enderror" name="breed"
-                                            value="{{ old('breed') }}" required autofocus>
 
-                                        @error('breed')
+                                        @error('breed_id')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
@@ -42,46 +39,46 @@
                                 </div>
 
                                 <div class="row mb-3">
-                                    <label for="password"
-                                        class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
+                                    <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Nazwa') }}</label>
+    
+                                    <div class="col-md-6">
+                                        <input id="name" type="text" class="form-control @error('name') is-invalid @enderror"
+                                            name="name" value="{{ old('name') }}" required autofocus>
+    
+                                        @error('name')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="visibility" class="col-md-4 col-form-label text-md-end">{{ __('Widoczność') }}</label>
 
                                     <div class="col-md-6">
-                                        <input id="password" type="password"
-                                            class="form-control @error('password') is-invalid @enderror" name="password"
-                                            required autocomplete="current-password">
-
-                                        @error('password')
+                                        <select class="form-control @error('visibility') is-invalid @enderror" name="visibility">
+                                            @php
+                                                $visibilities = [['private', 'Prywatna'], ['public', 'Publiczna']];
+                                            @endphp
+                                            @foreach ($visibilities as $visibility)
+                                                <option value="{{ $visibility[0] }}" {{ old('visibility') == $visibility[0] ? 'selected' : '' }}>{{$visibility[1]}}</option>
+                                            @endforeach
+                                        </select>
+    
+                                        @error('visibility')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
-                                    </div>
-                                </div>
-
-                                <div class="row mb-3">
-                                    <div class="col-md-6 offset-md-4">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="remember" id="remember"
-                                                {{ old('remember') ? 'checked' : '' }}>
-
-                                            <label class="form-check-label" for="remember">
-                                                {{ __('Remember Me') }}
-                                            </label>
-                                        </div>
                                     </div>
                                 </div>
 
                                 <div class="row mb-0">
                                     <div class="col-md-8 offset-md-4">
                                         <button type="submit" class="btn btn-primary">
-                                            {{ __('Login') }}
+                                            {{ __('Dodaj') }}
                                         </button>
-
-                                        @if (Route::has('password.request'))
-                                            <a class="btn btn-link" href="{{ route('password.request') }}">
-                                                {{ __('Forgot Your Password?') }}
-                                            </a>
-                                        @endif
                                     </div>
                                 </div>
                             </form>
