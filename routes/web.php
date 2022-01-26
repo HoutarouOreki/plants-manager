@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BreedsController;
 use App\Http\Controllers\PlantsController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -16,10 +17,13 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/plants');
 });
 
-Route::get('/plants', [PlantsController::class, 'index']);
+Route::get('/plants', [PlantsController::class, 'index'])->name('plants');
+Route::get('/plants/create', [PlantsController::class, 'create'])->name('plants/create');
+
+Route::get('/breeds/create', [BreedsController::class, 'create'])->name('breeds/create');
 
 Auth::routes();
 
