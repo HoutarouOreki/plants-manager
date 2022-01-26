@@ -25,6 +25,9 @@ class BreedsController extends Controller
      */
     public function create()
     {
+        if (!Auth::check()) {
+            return redirect('login');
+        }
         return view("breeds/create");
     }
 
@@ -39,9 +42,10 @@ class BreedsController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'min:2', 'max:255', 'unique:breeds'],
             'phMin' => ['required', 'min:0', 'max:14', 'numeric', 'lte:phMax'],
-            'phMax' => ['required', 'min:0', 'max:14', 'numeric', 'gte:phMin']
+            'phMax' => ['required', 'min:0', 'max:14', 'numeric', 'gte:phMin'],
+            'imageLink' => []
         ]);
-        
+
         if (Auth::user() == null) {
             return redirect('/');
         }
@@ -50,6 +54,9 @@ class BreedsController extends Controller
         $breed->name = $validated["name"];
         $breed->phMin = $validated["phMin"];
         $breed->phMax = $validated["phMax"];
+        if (count($validated["imageLink"]) > 1) {
+            $breed->image_link = $validated["imageLink"];
+        }
 
         if ($breed->save()) {
             return redirect('/breeds', 201);

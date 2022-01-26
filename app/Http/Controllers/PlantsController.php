@@ -17,9 +17,21 @@ class PlantsController extends Controller
      */
     public function index()
     {
+        $query = Plant::query()->where('visibility', '=', 'public');
+        if (Auth::check()) {
+            $query->orWhere('user_id', '=', Auth::user()?->id ?? 0);
+        }
+
+        return view('plants/index', ["plants" => $query->get()]);
+    }
+
+    public function myPlants()
+    {
+        if (!Auth::user()) {
+            return redirect('/login');
+        }
         return view('plants/index', ["plants" => Plant::query()
-            ->where('visibility', '=', 'public')
-            ->orWhere('user_id', '=', Auth::user()?->id ?? 0)->get()]);
+            ->where('user_id', '=', Auth::user()->id)->get()]);
     }
 
     /**
@@ -47,7 +59,9 @@ class PlantsController extends Controller
         $validated = $request->validate([
             'breed_id' => ['required', 'exists:breeds,id'],
             'name' => ['min:1', 'max:255'],
-            'visibility' => ['required', Rule::in(['private', 'public'])]
+            'visibility' => ['required', Rule::in(['private', 'public'])],
+            'imageLink' => []
+
         ]);
 
         if (Auth::user() == null) {
@@ -59,13 +73,13 @@ class PlantsController extends Controller
         $plant->name = $validated["name"];
         $plant->breed_id = $validated["breed_id"];
         $plant->visibility = $validated["visibility"];
-
-        if (!isset($validated['image_link']) || count($validated['image_link']) < 1) {
-            $plant->image_link = Breed::query()->whereKey($plant->breed_id)->get()[0]['image_link'];
+        $plant->image_link = $validated["imageLink"];
+        if (strlen($plant->image_link) < 2) {
+            $plant->image_link = Breed::find($plant->breed_id)["image_link"];
         }
 
         if ($plant->save()) {
-            return redirect('/plants', 201);
+            return redirect('/plants');
         }
     }
 
@@ -88,7 +102,16 @@ class PlantsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $plant = Plant::find($id);
+        //Sprawdzenie czy użytkownik jest autorem
+        if (Auth::user()->id != $plant->user_id) {
+            return back()->with([
+                'success' => false, 'message_type' => 'danger',
+                'message' => 'Nie posiadasz uprawnień do przeprowadzenia tej operacji.'
+            ]);
+        }
+
+        return view('plants/edit', ['plant' => $plant, 'breeds' => Breed::all()]);
     }
 
     /**
@@ -100,7 +123,38 @@ class PlantsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $plant = Plant::find($id);
+
+        if (Auth::user() == null) {
+            return redirect('/');
+        }
+
+        //Sprawdzenie czy użytkownik jest autorem
+        if (Auth::user()->id != $plant->user_id) {
+            return back()->with([
+                'success' => false, 'message_type' => 'danger',
+                'message' => 'Nie posiadasz uprawnień do przeprowadzenia tej operacji.'
+            ]);
+        }
+
+        $validated = $request->validate([
+            'breed_id' => ['required', 'exists:breeds,id'],
+            'name' => ['min:1', 'max:255'],
+            'visibility' => ['required', Rule::in(['private', 'public'])],
+            'imageLink' => []
+        ]);
+        
+        $plant->name = $validated["name"];
+        $plant->breed_id = $validated["breed_id"];
+        $plant->visibility = $validated["visibility"];
+        $plant->image_link = $validated["imageLink"];
+        if (strlen($plant->image_link) < 2) {
+            $plant->image_link = Breed::find($plant->breed_id)["image_link"];
+        }
+
+        if ($plant->save()) {
+            return redirect('/plants');
+        }
     }
 
     /**

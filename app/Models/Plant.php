@@ -11,5 +11,9 @@ class Plant extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function breed() {
+        return $this->belongsTo(Breed::class);
+    }
+
     use HasFactory;
 }

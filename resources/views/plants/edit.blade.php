@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-    Dodaj roślinę
+    Edycja rośliny
 @endsection
 @section('content')
     @if (count($breeds) === 0)
@@ -13,11 +13,12 @@
             <div class="row justify-content-center">
                 <div class="col-md-8">
                     <div class="card">
-                        <div class="card-header">{{ __('Dodaj roślinę') }}</div>
+                        <div class="card-header">{{ __('Edycja rośliny') }}</div>
 
                         <div class="card-body">
-                            <form method="POST" action="{{ route('plants/create') }}">
-                                @csrf
+                            <form method="POST" action="{{ route('plants/update', $plant) }}">
+                                {{ csrf_field() }}
+                                <input name="_method" type="hidden" value="PUT">
 
                                 <div class="row mb-3">
                                     <label for="breed"
@@ -26,7 +27,7 @@
                                     <div class="col-md-6">
                                         <select class="form-control @error('breed_id') is-invalid @enderror" name="breed_id">
                                             @foreach ($breeds as $breed)
-                                                <option value="{{$breed->id}}" {{ old('breed_id') == $breed->id ? 'selected' : '' }}>{{$breed->name}}</option>
+                                                <option value="{{$breed->id}}" {{ $plant->breed->id == $breed->id ? 'selected' : (old('breed_id') == $breed->id ? 'selected' : '') }}>{{$breed->name}}</option>
                                             @endforeach
                                         </select>
 
@@ -43,7 +44,7 @@
     
                                     <div class="col-md-6">
                                         <input id="name" type="text" class="form-control @error('name') is-invalid @enderror"
-                                            name="name" value="{{ old('name') }}" required autofocus>
+                                            name="name" value="{{ $plant->name }}" required autofocus>
     
                                         @error('name')
                                             <span class="invalid-feedback" role="alert">
@@ -62,7 +63,7 @@
                                                 $visibilities = [['private', 'Prywatna'], ['public', 'Publiczna']];
                                             @endphp
                                             @foreach ($visibilities as $visibility)
-                                                <option value="{{ $visibility[0] }}" {{ old('visibility') == $visibility[0] ? 'selected' : '' }}>{{$visibility[1]}}</option>
+                                                <option value="{{ $visibility[0] }}" {{ $plant->visibility == $visibility[0] ? 'selected' : '' }}>{{$visibility[1]}}</option>
                                             @endforeach
                                         </select>
     
@@ -91,8 +92,8 @@
 
                                 <div class="row mb-0">
                                     <div class="col-md-8 offset-md-4">
-                                        <button type="submit" class="btn btn-primary">
-                                            {{ __('Dodaj') }}
+                                        <button type="submit" class="btn btn-success">
+                                            {{ __('Zaktualizuj') }}
                                         </button>
                                     </div>
                                 </div>
