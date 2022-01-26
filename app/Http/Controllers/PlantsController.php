@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Breed;
 
 class PlantsController extends Controller
 {
@@ -23,7 +24,8 @@ class PlantsController extends Controller
      */
     public function create()
     {
-        return view("plants/create");
+        $breeds = Breed::all();
+        return view("plants/create", ["breeds" => $breeds]);
     }
 
     /**

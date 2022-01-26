@@ -1,4 +1,9 @@
 @extends('layouts.app')
+@section('title')
+    Rośliny
+@endsection
 @section('content')
-    <a class="btn btn-primary" href="{{ route('create_plant') }}">Dodaj roślinę</a>
+    <div class="text-center">
+        <a class="btn btn-primary" href="{{ route('plants/create') }}">Dodaj roślinę</a>
+    </div>
 @endsection

@@ -23,7 +23,9 @@ Route::get('/', function () {
 Route::get('/plants', [PlantsController::class, 'index'])->name('plants');
 Route::get('/plants/create', [PlantsController::class, 'create'])->name('plants/create');
 
+Route::get('/breeds', [BreedsController::class, 'index'])->name('breeds');
 Route::get('/breeds/create', [BreedsController::class, 'create'])->name('breeds/create');
+Route::post('/breeds/create', [BreedsController::class, 'store'])->name('breeds/store');
 
 Auth::routes();
 

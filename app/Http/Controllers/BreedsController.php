@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Breed;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BreedsController extends Controller
 {
@@ -13,7 +15,7 @@ class BreedsController extends Controller
      */
     public function index()
     {
-        //
+        return view('breeds/index', ["breeds" => Breed::all()]);
     }
 
     /**
@@ -23,7 +25,7 @@ class BreedsController extends Controller
      */
     public function create()
     {
-        //
+        return view("breeds/create");
     }
 
     /**
@@ -34,7 +36,24 @@ class BreedsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => ['required', 'min:2', 'max:255', 'unique:breeds'],
+            'phMin' => ['required', 'min:0', 'max:14', 'numeric', 'lte:phMax'],
+            'phMax' => ['required', 'min:0', 'max:14', 'numeric', 'gte:phMin']
+        ]);
+        
+        if (Auth::user() == null) {
+            return redirect('/');
+        }
+
+        $breed = new Breed;
+        $breed->name = $validated["name"];
+        $breed->phMin = $validated["phMin"];
+        $breed->phMax = $validated["phMax"];
+
+        if ($breed->save()) {
+            return redirect('/breeds', 201);
+        }
     }
 
     /**
