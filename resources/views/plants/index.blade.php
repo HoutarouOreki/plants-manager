@@ -36,9 +36,6 @@
                                     <small class="card-text">Ostatnie podlewanie:<br>{{ $plant->last_watering }}</small>
                                     @endif
                                 </div>
-                                <div class="card-footer">
-                                    <small class="text-muted">Właściciel: {{ $plant->user->name }}</small>
-                                </div>
                                 @if (Auth::user() != null && $plant->user_id == Auth::user()->id)
                                     <div class="card-footer p-0">
                                         <a href="{{ route('plants/water', $plant->id) }}" class="btn btn-link"
@@ -53,6 +50,9 @@
                                         </a>
                                     </div>
                                 @endif
+                                <div class="card-footer">
+                                    <small class="text-muted">Właściciel: {{ $plant->user->name }}</small>
+                                </div>
                             </div>
                         </div>
                     @endforeach
