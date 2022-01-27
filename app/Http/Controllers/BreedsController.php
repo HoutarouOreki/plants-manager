@@ -56,6 +56,9 @@ class BreedsController extends Controller
         $breed->phMax = $validated["phMax"];
         if (count($validated["imageLink"]) > 1) {
             $breed->image_link = $validated["imageLink"];
+        } else {
+            // licencja obrazka https://www.freepikcompany.com/legal#nav-freepik-agreement
+            $breed->image_link = 'https://image.flaticon.com/icons/png/512/628/628283.png';
         }
 
         if ($breed->save()) {

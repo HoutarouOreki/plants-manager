@@ -10,9 +10,8 @@
         }
 
         img {
-            margin: 10px;
-            max-height: 60px;
-            max-width: 100px;
+            max-height: 100px;
+            object-fit: cover;
         }
 
     </style>
@@ -24,40 +23,35 @@
         @if (count($plants) == 0)
             <p>Nie ma roślin do wyświetlenia.</p>
         @else
-            <table>
-                <tr>
-                    <th>Nazwa</th>
-                    <th>Gatunek</th>
-                    <th>Obrazek</th>
-                    <th>Właściciel</th>
-                </tr>
-                @foreach ($plants as $plant)
-                    <tr>
-                        <td>
-                            <a>{{ $plant->name }}</a>
-                        </td>
-                        <td>
-                            <a>{{ $plant->breed->name }}</a>
-                        </td>
-                        <td>
-                            <img src="{{ $plant->image_link }}">
-                        </td>
-                        <td>
-                            <a>{{ $plant->user->name }}</a>
-                        </td>
-                        @if (Auth::user() != null && $plant->user_id == Auth::user()->id)
-                            <td>
-                                <a href="{{ route('plants/edit', $plant->id) }}" class="btn btn-success btn-xs" title="Edytuj">
-                                    Edytuj </a>
-                                <a href="{{ route('plants/destroy', $plant->id) }}" class="btn btn-danger btn-xs"
-                                    onclick="return confirm('Jesteś pewien?')">
-                                    Usuń
-                                </a>
-                            </td>
-                        @endif
-                    </tr>
-                @endforeach
-            </table>
+            <div class="container">
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    @foreach ($plants as $plant)
+                        <div class="col-xl-3 col-lg-4 col-sm-6 my-2">
+                            <div class="card h-100 border-success">
+                                <img src="{{ $plant->image_link }}" class="card-img-top" alt="...">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ $plant->name }}</h5>
+                                    <p class="card-text">{{ $plant->breed->name }}</p>
+                                </div>
+                                <div class="card-footer">
+                                    <small class="text-muted">Właściciel: {{ $plant->user->name }}</small>
+                                </div>
+                                @if (Auth::user() != null && $plant->user_id == Auth::user()->id)
+                                    <div class="card-footer p-0">
+                                        <a href="{{ route('plants/edit', $plant->id) }}" class="btn btn-link"
+                                            title="Edytuj">
+                                            <small>Edytuj</small> </a>
+                                        <a href="{{ route('plants/destroy', $plant->id) }}" class="btn btn-link"
+                                            onclick="return confirm('Jesteś pewien?')">
+                                            <small>Usuń</small>
+                                        </a>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
         @endif
     </div>
 @endsection

@@ -19,8 +19,7 @@ class CreateBreedsTable extends Migration
             $table->float('phMin', 4, 2, true);
             $table->float('phMax', 4, 2, true);
 
-            // licencja obrazka https://www.freepikcompany.com/legal#nav-freepik-agreement
-            $table->text('image_link')->default('https://image.flaticon.com/icons/png/512/628/628283.png');
+            $table->text('image_link');
         });
     }
 
