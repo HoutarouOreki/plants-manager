@@ -54,7 +54,7 @@ class BreedsController extends Controller
         $breed->name = $validated["name"];
         $breed->phMin = $validated["phMin"];
         $breed->phMax = $validated["phMax"];
-        if (count($validated["imageLink"]) > 1) {
+        if (strlen($validated["imageLink"]) > 1) {
             $breed->image_link = $validated["imageLink"];
         } else {
             // licencja obrazka https://www.freepikcompany.com/legal#nav-freepik-agreement
