@@ -114,6 +114,28 @@ class PlantsController extends Controller
         return view('plants/edit', ['plant' => $plant, 'breeds' => Breed::all()]);
     }
 
+    public function water($id)
+    {
+        $plant = Plant::find($id);
+
+        if (Auth::user() == null) {
+            return redirect('/');
+        }
+
+        //Sprawdzenie czy użytkownik jest autorem
+        if (Auth::user()->id != $plant->user_id) {
+            return redirect('/');
+        }
+        
+        $plant->last_watering = date('Y-m-d H:i:s');
+
+        if ($plant->save()) {
+            return back();
+        }
+
+        return back();
+    }
+
     /**
      * Update the specified resource in storage.
      *
