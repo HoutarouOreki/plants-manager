@@ -26,7 +26,7 @@ Route::get('/plants/edit/{id}', [PlantsController::class, 'edit'])->name('plants
 Route::put('/plants/update/{id}', [PlantsController::class, 'update'])->name('plants/update');
 Route::get('/plants/water/{id}', [PlantsController::class, 'water'])->name('plants/water');
 Route::post('/plants/create', [PlantsController::class, 'store'])->name('plants/store');
-Route::post('/plants/destroy', [PlantsController::class, 'destroy'])->name('plants/destroy');
+Route::get('/plants/destroy', [PlantsController::class, 'destroy'])->name('plants/destroy');
 Route::get('/plants/my', [PlantsController::class, 'myPlants'])->name('myPlants');
 
 Route::get('/breeds', [BreedsController::class, 'index'])->name('breeds');
