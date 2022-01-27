@@ -10,7 +10,7 @@
         }
 
         img {
-            max-height: 100px;
+            max-height: 200px;
             object-fit: cover;
         }
 
